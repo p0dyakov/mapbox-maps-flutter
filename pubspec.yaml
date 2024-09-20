@@ -29,8 +29,5 @@ dev_dependencies:
 flutter:
   plugin:
     platforms:
-      android:
-        package: com.mapbox.maps.mapbox_maps
-        pluginClass: MapboxMapsPlugin
       ios:
         pluginClass: MapboxMapsPlugin
