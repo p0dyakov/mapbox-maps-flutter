@@ -62,7 +62,8 @@ class MapsDemo extends StatelessWidget {
   //
   // Alternatively you can replace `String.fromEnvironment("ACCESS_TOKEN")`
   // in the following line with your access token directly.
-  static const String ACCESS_TOKEN = String.fromEnvironment("ACCESS_TOKEN");
+  static const String ACCESS_TOKEN =
+      'sk.eyJ1IjoicmVjaGFyZ2U5OTkiLCJhIjoiY20wMmZwcmo2MDB0dDJscXF0azZvYTY2biJ9.J44pPV7Pmc13mtqfj4oOog';
 
   void _pushPage(BuildContext context, ExamplePage page) async {
     Navigator.of(context).push(MaterialPageRoute<void>(
@@ -74,14 +75,15 @@ class MapsDemo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    MapboxOptions.setAccessToken(MapsDemo.ACCESS_TOKEN);
+
     return Scaffold(
       appBar: AppBar(title: const Text('MapboxMaps examples')),
       body: ACCESS_TOKEN.isEmpty || ACCESS_TOKEN.contains("YOUR_TOKEN")
           ? buildAccessTokenWarning()
           : ListView.separated(
               itemCount: _allPages.length,
-              separatorBuilder: (BuildContext context, int index) =>
-                  const Divider(height: 1),
+              separatorBuilder: (BuildContext context, int index) => const Divider(height: 1),
               itemBuilder: (_, int index) => ListTile(
                 leading: _allPages[index].leading,
                 title: Text(_allPages[index].title),
@@ -106,10 +108,7 @@ class MapsDemo extends StatelessWidget {
                     padding: EdgeInsets.all(8),
                     child: Text(text,
                         textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white)),
+                        style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.white)),
                   ))
               .toList(),
         ),

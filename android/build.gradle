@@ -1,0 +1,84 @@
+group 'com.mapbox.maps.mapbox_maps'
+version '1.0.0'
+
+buildscript {
+    ext.kotlin_version = '1.8.22'
+    repositories {
+        google()
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath 'com.android.tools.build:gradle:7.4.2'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+
+rootProject.allprojects {
+    def token = "sk.eyJ1IjoicmVjaGFyZ2U5OTkiLCJhIjoiY20wMmZwcmo2MDB0dDJscXF0azZvYTY2biJ9.J44pPV7Pmc13mtqfj4oOog"
+
+    if (token == null || token.empty) {
+        throw new Exception("SDK Registry token is null. See README.md for more information.")
+    }
+    repositories {
+        google()
+        mavenCentral()
+        maven {
+            url 'https://api.mapbox.com/downloads/v2/releases/maven'
+            authentication {
+                basic(BasicAuthentication)
+            }
+            credentials {
+                username = "mapbox"
+                password = token
+            }
+        }
+        maven {
+            url 'https://api.mapbox.com/downloads/v2/snapshots/maven'
+            authentication {
+                basic(BasicAuthentication)
+            }
+            credentials {
+                username = "mapbox"
+                password = token
+            }
+        }
+    }
+}
+
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+
+android {
+    compileSdk 33
+
+    namespace 'com.mapbox.maps.mapbox_maps'
+    sourceSets {
+        main.java.srcDirs += 'src/main/kotlin'
+    }
+    defaultConfig {
+        minSdkVersion 21
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+}
+
+if (file("$rootDir/gradle/ktlint.gradle").exists() && file("$rootDir/gradle/lint.gradle").exists()) {
+    project.apply {
+        from("$rootDir/gradle/ktlint.gradle")
+        from("$rootDir/gradle/lint.gradle")
+    }
+}
+
+dependencies {
+    implementation "com.mapbox.maps:android:11.7.0-rc.1"
+    implementation "androidx.annotation:annotation:1.8.2"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.8.4"
+}
